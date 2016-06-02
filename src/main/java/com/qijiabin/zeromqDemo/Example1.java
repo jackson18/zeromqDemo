@@ -1,8 +1,6 @@
 package com.qijiabin.zeromqDemo;
 
 import java.util.Date;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 import org.zeromq.ZMQ;
 
@@ -11,22 +9,22 @@ import org.zeromq.ZMQ;
  * 日 期：2016年6月1日 下午4:24:31
  * 作 者：qijiabin
  * 版 本：1.0.0
- * 类说明：
+ * 类说明：发布与订阅模式
  * TODO
  * ========================================================
  * 修订日期     修订人    描述
  */
 public class Example1 {
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String[] args) {
-		new Thread(new FutureTask(new Server())).start();
-		new Thread(new FutureTask(new Client())).start();
+		new Thread(new Server()).start();
+		new Thread(new Client()).start();
 	}
 
-	static class Server implements Callable<Void> {
+	static class Server implements Runnable {
 		
-		public Void call() throws Exception {
+		@Override
+		public void run() {
 			// 创建1个I/O线程的上下文 
 			ZMQ.Context context = ZMQ.context(1);  
 			// 发布者
@@ -49,9 +47,10 @@ public class Example1 {
 		
 	}
 	
-	static class Client implements Callable<Void> {
+	static class Client implements Runnable {
 		
-		public Void call() throws Exception {
+		@Override
+		public void run() {
 			// 创建1个I/O线程的上下文 
 			ZMQ.Context context = ZMQ.context(1);  
 			// 订阅者
